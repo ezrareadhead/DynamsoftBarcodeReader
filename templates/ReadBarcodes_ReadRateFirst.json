@@ -1,0 +1,115 @@
+{
+	"CaptureVisionTemplates": [
+		{
+			"Name": "ReadBarcodes_ReadRateFirst",
+			"ImageROIProcessingNameArray": [
+				"roi-read-barcodes-read-rate"
+			],
+			"Timeout": 100000
+		}
+	],
+	"TargetROIDefOptions": [
+		{
+			"Name": "roi-read-barcodes-read-rate",
+			"TaskSettingNameArray": [
+				"task-read-barcodes-read-rate"
+			]
+		}
+	],
+	"BarcodeFormatSpecificationOptions": [
+		{
+			"Name": "bfs1-read-rate-first",
+			"BarcodeFormatIds": [
+				"BF_PDF417",
+				"BF_QR_CODE",
+				"BF_DATAMATRIX",
+				"BF_AZTEC",
+				"BF_MICRO_QR",
+				"BF_MICRO_PDF417",
+				"BF_DOTCODE"
+			],
+			"MirrorMode": "MM_BOTH"
+		},
+		{
+			"Name": "bfs2-read-rate-first",
+			"BarcodeFormatIds": [
+				"BF_ALL"
+			],
+			"MirrorMode": "MM_NORMAL"
+		}
+	],
+	"BarcodeReaderTaskSettingOptions": [
+		{
+			"Name": "task-read-barcodes-read-rate",
+			"ExpectedBarcodesCount" : 999,
+			"LocalizationModes": [
+				{
+					"Mode": "LM_CONNECTED_BLOCKS"
+				},
+				{
+					"Mode": "LM_LINES"
+				},
+				{
+					"Mode": "LM_STATISTICS"
+				}
+			],
+			"DeblurModes": [
+				{
+					"Mode": "DM_BASED_ON_LOC_BIN"
+				},
+				{
+					"Mode": "DM_THRESHOLD_BINARIZATION"
+				},
+				{
+					"Mode": "DM_DIRECT_BINARIZATION"
+				},
+				{
+					"Mode": "DM_SMOOTHING"
+				}
+			],
+			"BarcodeFormatSpecificationNameArray": [
+				"bfs1-read-rate-first",
+				"bfs2-read-rate-first"
+			],
+			"SectionImageParameterArray": [
+				{
+					"Section": "ST_REGION_PREDETECTION",
+					"ImageParameterName": "ip-read-barcodes-read-rate"
+				},
+				{
+					"Section": "ST_BARCODE_LOCALIZATION",
+					"ImageParameterName": "ip-read-barcodes-read-rate"
+				},
+				{
+					"Section": "ST_BARCODE_DECODING",
+					"ImageParameterName": "ip-read-barcodes-read-rate"
+				}
+			]
+		}
+	],
+	"ImageParameterOptions": [
+		{
+			"Name": "ip-read-barcodes-read-rate",
+			"TextDetectionMode": {
+				"Mode": "TTDM_LINE",
+				"Direction": "UNKNOWN",
+				"Sensitivity": 3
+			},
+			"IfEraseTextZone": 1,
+			"BinarizationModes": [
+				{
+					"Mode": "BM_LOCAL_BLOCK",
+					"BlockSizeX": 0,
+					"BlockSizeY": 0,
+					"EnableFillBinaryVacancy": 1
+				}
+			],
+			"GrayscaleTransformationModes" : [ 
+				{
+					"Mode": "GTM_ORIGINAL"
+				}
+			],
+			"ScaleDownThreshold" : 100000
+		}
+	]
+}

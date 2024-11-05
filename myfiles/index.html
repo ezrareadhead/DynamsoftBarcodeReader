@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/dynamsoft-barcode-reader-bundle@10.4.2002/dist/dbr.bundle.js"></script>
+<link rel="stylesheet" href="style.css">
+
+<div id="camera-view-container" style="width: 100%; height: 60vh"></div>
+<textarea id="results" style="width: 100%; min-height: 10vh; font-size: 3vmin; overflow: auto" disabled></textarea>
+<img id="product-image" style="width: 100%; max-height: 40vh; display: none;" alt="Scanned Product Image" src="https://www.adobe.com/content/dam/cc/us/en/creativecloud/illustration-adobe-illustration/how-to-draw-trees/draw-trees_fb-img_1200x800.jpg">
+
+<script>
+  // Define your JSON data
+  const jsonData = {
+    "434903489038": {
+      "name": "Product A",
+      "imageUrl": "https://www.adobe.com/content/dam/cc/us/en/creativecloud/illustration-adobe-illustration/how-to-draw-trees/draw-trees_fb-img_1200x800.jpg"
+    },
+    "434903489111": {
+      "name": "Product B",
+      "imageUrl": "https://cdn.sanity.io/images/5dqbssss/production-v3/ba1b4d0fa43a05a6ad448878cc4be22dc5f88b90-1200x675.jpg?w=3840&q=75&fit=clip&auto=format"
+    },
+    "434903489194": {
+      "name": "Product A",
+      "imageUrl": "https://www.adobe.com/content/dam/cc/us/en/creativecloud/illustration-adobe-illustration/how-to-draw-trees/draw-trees_fb-img_1200x800.jpg"
+    },
+    "434903489277": {
+      "name": "Product B",
+      "imageUrl": "https://cdn.sanity.io/images/5dqbssss/production-v3/ba1b4d0fa43a05a6ad448878cc4be22dc5f88b90-1200x675.jpg?w=3840&q=75&fit=clip&auto=format"
+    },
+    "434903489350": {
+      "name": "Product A",
+      "imageUrl": "https://www.adobe.com/content/dam/cc/us/en/creativecloud/illustration-adobe-illustration/how-to-draw-trees/draw-trees_fb-img_1200x800.jpg"
+    },
+    "434903489434": {
+      "name": "Product B",
+      "imageUrl": "https://cdn.sanity.io/images/5dqbssss/production-v3/ba1b4d0fa43a05a6ad448878cc4be22dc5f88b90-1200x675.jpg?w=3840&q=75&fit=clip&auto=format"
+    },
+    "434903489517": {
+      "name": "Product A",
+      "imageUrl": "https://www.adobe.com/content/dam/cc/us/en/creativecloud/illustration-adobe-illustration/how-to-draw-trees/draw-trees_fb-img_1200x800.jpg"
+    },
+    "434903489590": {
+      "name": "Product B",
+      "imageUrl": "https://cdn.sanity.io/images/5dqbssss/production-v3/ba1b4d0fa43a05a6ad448878cc4be22dc5f88b90-1200x675.jpg?w=3840&q=75&fit=clip&auto=format"
+    },
+    "434903489673": {
+      "name": "Product A",
+      "imageUrl": "https://www.adobe.com/content/dam/cc/us/en/creativecloud/illustration-adobe-illustration/how-to-draw-trees/draw-trees_fb-img_1200x800.jpg"
+    },
+    "434903489756": {
+      "name": "Product B",
+      "imageUrl": "https://cdn.sanity.io/images/5dqbssss/production-v3/ba1b4d0fa43a05a6ad448878cc4be22dc5f88b90-1200x675.jpg?w=3840&q=75&fit=clip&auto=format"
+    }
+  };
+
+
+  Dynamsoft.License.LicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAzMjMyNzkzLVRYbFhaV0pRY205cSIsIm1haW5TZXJ2ZXJVUkwiOiJodHRwczovL21kbHMuZHluYW1zb2Z0b25saW5lLmNvbSIsIm9yZ2FuaXphdGlvbklEIjoiMTAzMjMyNzkzIiwic3RhbmRieVNlcnZlclVSTCI6Imh0dHBzOi8vc2Rscy5keW5hbXNvZnRvbmxpbmUuY29tIiwiY2hlY2tDb2RlIjotMTAyMzIxMjUzMn0=");
+  Dynamsoft.Core.CoreModule.loadWasm(["dbr"]);
+  (async () => {
+    let cvRouter = await Dynamsoft.CVR.CaptureVisionRouter.createInstance();
+
+    let cameraView = await Dynamsoft.DCE.CameraView.createInstance();
+    let cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance(cameraView);
+    document.querySelector("#camera-view-container").append(cameraView.getUIElement());
+    cvRouter.setInput(cameraEnhancer);
+
+    const resultsContainer = document.querySelector("#results");
+    const productImage = document.querySelector("#product-image");
+
+    cvRouter.addResultReceiver({ onDecodedBarcodesReceived: (result) => {
+      if (result.barcodeResultItems.length > 0) {
+        resultsContainer.textContent = '';
+        for (let item of result.barcodeResultItems) {
+          resultsContainer.textContent += `${item.formatString}: ${item.text}\n\n`;
+          
+        //   productImage.src = product.imageUrl;
+        //   productImage.style.display = "block";  // Show the image
+
+          // Check if barcode number exists in JSON
+          if (jsonData[item.text]) {
+            const product = jsonData[item.text];
+            productImage.src = product.imageUrl;
+            productImage.style.display = "block";  // Show the image
+          } else {
+            productImage.style.display = "none";   // Hide if not found
+          }
+        }
+      }
+    }});
+
+    let filter = new Dynamsoft.Utility.MultiFrameResultCrossFilter();
+    filter.enableResultCrossVerification('barcode', true);
+    filter.enableResultDeduplication('barcode', true);
+    await cvRouter.addResultFilter(filter);
+
+    await cameraEnhancer.open();
+    await cvRouter.startCapturing("ReadSingleBarcode");
+  })();
+</script>
+</body>
+</html>
