@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "dynamsoft-barcode-reader-bundle": "10.4.2002"
+  }
+}

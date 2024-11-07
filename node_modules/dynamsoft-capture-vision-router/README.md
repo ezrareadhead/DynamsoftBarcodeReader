@@ -1,0 +1,3 @@
+# Dynamsoft Capture Vision Router Module
+
+The Dynamsoft Capture Vision Router module is the cornerstone of the [Dynamsoft Capture Vision (DCV) architecture](https://www.dynamsoft.com/capture-vision/docs/web/programming/javascript/). It focuses on coordinating batch image processing and provides APIs for setting up image sources and result receivers, configuring workflows with parameters, and controlling processes.
