@@ -55,7 +55,7 @@
   margin: 0 ;
   /* width: 975px !important; */
   height: 500px !important;
-  background-image: url("/assets/heather-green-Kpj1c6eoPJA-unsplash.jpg");
+  background-image: url("./assets/heather-green-Kpj1c6eoPJA-unsplash.jpg");
   background-position: center;
   background-repeat: no-repeat;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -106,7 +106,7 @@ button{
 }
 
 #scan-button, #undo-button, #clear-button, #redo-button {
-  background-image: url("/assets/camera.png");
+  background-image: url("./assets/camera.png");
   border: none;
   color: #151515;
   padding: 15px 32px;
@@ -158,7 +158,7 @@ button:hover{
 #undo-button, #redo-button{
   /* background-image: url("assets/undo.png"); */
   width: 59px;
-  background-image: url("/assets//Indonesia_New_Road_Sign_Info_7b.png");
+  background-image: url("./assets//Indonesia_New_Road_Sign_Info_7b.png");
   border-radius: 3px;
   height: 30px;
   background-size: 55px;
@@ -182,7 +182,7 @@ button:hover{
 
 #clear-button{
   width: 30px;
-  background-image: url("/assets/Peru_road_sign_P-6.gif");
+  background-image: url("./assets/Peru_road_sign_P-6.gif");
   border-radius: 4px;
   height: 30px;
   transform: rotateZ(5deg);
