@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- <link rel="stylesheet" href="styles.css"> -->
+</head>
+<body>
+<script src="/distributables/dynamsoft-barcode-reader-bundle@10.4.2002/dist/dbr.bundle.js"></script>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://use.typekit.net/mbj0awg.css">
+
+<nav>
+  <p>CAVO<span id="Cavo">COLLECTIVE</span></p>
+</nav>
+<div class="camera-container">
+  <div class="buttons">
+    <button id="undo-button" class="disabled-button" type="button" onclick="undo()"></button>
+    <button id="redo-button" class="disabled-button" type="button" onclick="redo()"></button>
+    <button id="scan-button" type="button" onclick="showDiv()"></button>
+    <button id="clear-button" class="disabled-button" type="button" onclick="clearCanvas()"></button>
+  </div>
+  <div id="camera-view-container" style="display: none;">
+    <img class="tape" style="transform: translateX(200%) translateY(-50%);" src="/myfiles/assets/15.png" alt="">
+    <img class="tape" id="ver" style="transform: translateX(-50%) translateY(30%);" src="/myfiles/assets/28.png" alt="">
+    <img class="tape" id="diag" style="transform: translateX(265%) translateY(135%) rotateZ(270deg);" src="/myfiles/assets/43.png" alt="">
+  </div>
+  <div id="canvas-view-container" style="display: block;">
+    <img class="tape" style="transform: translateX(200%) translateY(-50%);" src="/myfiles/assets/15.png" alt="">
+    <img class="tape" id="ver" style="transform: translateX(-50%) translateY(30%);" src="/myfiles/assets/28.png" alt="">
+    <img class="tape" id="diag" style="transform: translateX(265%) translateY(135%) rotateZ(270deg);" src="/myfiles/assets/43.png" alt="">
+  </div>
+  <div class="buttons">
+    <button id="hidden" class="disabled-button" type="button"></button>
+    <button id="hidden" class="disabled-button" type="button"></button>
+    <button id="hidden" type="button"></button>
+    <button id="hidden" class="disabled-button" type="button"></button>
+  </div>
+</div>
+<textarea id="results" style="width: 100%; min-height: 10vh; font-size: 3vmin; overflow: auto; display: none;" disabled></textarea>
+
+<div class="footer">
+  <p><span>C</span><span>U</span><span>T</span></p>
+  <p><span>'</span><span>N</span></p>
+  <p><span>P<span id="pen">&lt &gt</span></span><span>A</span><span>S</span><span>T</span><span>E</span></p>
+</div>
+
+<script>
+let imageHistory = [];
+let redoHistory = [];
+let isScanning = false;
+let cvRouter, cameraEnhancer;
+
+const jsonData = {
+  "9781408890042": { "name": "Product A", "imageUrl": "https://www.adobe.com/content/dam/cc/us/en/creativecloud/illustration-adobe-illustration/how-to-draw-trees/draw-trees_fb-img_1200x800.jpg" },
+  "8714100597347": { "name": "Product B", "imageUrl": "https://cdn.sanity.io/images/5dqbssss/production-v3/ba1b4d0fa43a05a6ad448878cc4be22dc5f88b90-1200x675.jpg?w=3840&q=75&fit=clip&auto=format" },
+  // Add other entries as needed
+};
+
+function clearCanvas() {
+  const images = document.getElementsByClassName('product-image');
+  if (images.length && confirm("Clear the canvas? This can't be undone.")) {
+    while (images.length) images[0].remove();
+    imageHistory = [];
+    redoHistory = [];
+    updateButtons();
+  }
+}
+
+function undo() {
+  const lastImage = imageHistory.pop();  // Remove the last image from the history
+  if (lastImage) {
+    lastImage.remove();  // Remove it from the DOM
+    redoHistory.push(lastImage);  // Add it to the redo history
+  }
+  updateButtons();  // Update the button states
+}
+
+function redo() {
+  // If there's an image in the redo history, restore the most recent image
+  const lastUndoneImage = redoHistory.pop();  // Get the last undone image
+  if (lastUndoneImage) {
+    document.getElementById('canvas-view-container').appendChild(lastUndoneImage);  // Re-add it to the DOM
+    imageHistory.push(lastUndoneImage);  // Add it back to the image history
+  }
+  updateButtons();  // Update the button states
+}
+
+function updateButtons() {
+  const undoButton = document.getElementById('undo-button');
+  const redoButton = document.getElementById('redo-button');
+  const clearButton = document.getElementById('clear-button');
+  const images = document.getElementsByClassName('product-image');
+  
+  // Disable the buttons if there are no actions to undo/redo, and apply the grayscale style
+  undoButton.disabled = imageHistory.length === 0;
+  redoButton.disabled = redoHistory.length === 0;
+
+  // Add the 'disabled-button' class if the button is disabled, and remove it if enabled
+  if (undoButton.disabled) {
+    undoButton.classList.add('disabled-button');
+  } else {
+    undoButton.classList.remove('disabled-button');
+  }
+
+  if (redoButton.disabled) {
+    redoButton.classList.add('disabled-button');
+  } else {
+    redoButton.classList.remove('disabled-button');
+  }
+
+  if(images.length==0  && imageHistory.length == 0 && redoHistory == 0){
+    clearButton.classList.add('disabled-button');
+  }
+  else{
+    clearButton.classList.remove('disabled-button');
+  }
+}
+
+function showDiv() {
+  const cameraViewContainer = document.getElementById('camera-view-container');
+  const canvasViewContainer = document.getElementById('canvas-view-container');
+  const button = document.getElementById('scan-button');
+
+  if (cameraViewContainer.style.display === "none") {
+    cameraViewContainer.style.display = "block";
+    canvasViewContainer.style.display = "none";
+    button.style.backgroundImage = "url('./assets/stop.png')";
+    startScanning();
+  } else {
+    cameraViewContainer.style.display = "none";
+    canvasViewContainer.style.display = "block";
+    button.style.backgroundImage = "url('./assets/camera.png')";
+    stopScanning();
+  }
+}
+
+Dynamsoft.License.LicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAzMjMyNzkzLVRYbFhaV0pRY205cSIsIm1haW5TZXJ2ZXJVUkwiOiJodHRwczovL21kbHMuZHluYW1zb2Z0b25saW5lLmNvbSIsIm9yZ2FuaXphdGlvbklEIjoiMTAzMjMyNzkzIiwic3RhbmRieVNlcnZlclVSTCI6Imh0dHBzOi8vc2Rscy5keW5hbXNvZnRvbmxpbmUuY29tIiwiY2hlY2tDb2RlIjotMTAyMzIxMjUzMn0=");
+Dynamsoft.Core.CoreModule.loadWasm(["dbr"]);
+(async () => {
+  cvRouter = await Dynamsoft.CVR.CaptureVisionRouter.createInstance();
+  let cameraView = await Dynamsoft.DCE.CameraView.createInstance();
+  cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance(cameraView);
+  document.querySelector("#camera-view-container").append(cameraView.getUIElement());
+  cvRouter.setInput(cameraEnhancer);
+
+  let filter = new Dynamsoft.Utility.MultiFrameResultCrossFilter();
+  filter.enableResultCrossVerification('barcode', true);
+  filter.enableResultDeduplication('barcode', true);
+  await cvRouter.addResultFilter(filter);
+
+  cvRouter.addResultReceiver({ onDecodedBarcodesReceived: handleBarcodeResults });
+  await cameraEnhancer.close();
+})();
+
+function handleBarcodeResults(result) {
+  const resultsContainer = document.querySelector("#results");
+  const cameraViewContainer = document.getElementById('camera-view-container');
+  const button = document.getElementById('scan-button');
+  const canvasViewContainer = document.getElementById('canvas-view-container');
+
+  if (result.barcodeResultItems.length) {
+    resultsContainer.textContent = '';
+    for (let item of result.barcodeResultItems) {
+      resultsContainer.textContent += `${item.formatString}: ${item.text}\n\n`;
+      console.log(item.formatString, item.text)
+
+      if (jsonData[item.text] && !document.getElementById(item.text)) {
+        const product = jsonData[item.text];
+        const img = document.createElement('img');
+        img.className = 'product-image';
+        img.id = item.text;
+        img.src = product.imageUrl;
+        img.alt = `Image for ${product.name}`;
+        img.style.display = 'block';
+
+        document.getElementById('canvas-view-container').appendChild(img);
+        imageHistory.push(img);
+        redoHistory = [];
+        updateButtons();
+
+        cameraViewContainer.style.display = "none";
+        button.style.backgroundImage = "url('./assets/camera.png')";
+        canvasViewContainer.style.display = "block";
+        stopScanning();
+      }
+    }
+  }
+}
+
+async function startScanning() {
+  if (!isScanning) {
+    isScanning = true;
+    await cameraEnhancer.open();
+    await cvRouter.startCapturing("ReadSingleBarcode");
+  }
+}
+
+async function stopScanning() {
+  if (isScanning) {
+    isScanning = false;
+    await cvRouter.stopCapturing();
+    await cameraEnhancer.close();
+  }
+}
+</script>
+</body>
+</html>
