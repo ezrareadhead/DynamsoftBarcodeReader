@@ -57,12 +57,18 @@ const jsonData = {
 
 function clearCanvas() {
   const images = document.getElementsByClassName('product-image');
-  if (images.length && confirm("Clear the canvas? This can't be undone.")) {
-    while (images.length) images[0].remove();
-    imageHistory = [];
-    redoHistory = [];
-    updateButtons();
+
+  if(!images.disabled){
+    if (confirm("Clear the canvas?\ This can't be undone.")) {
+      while (images.length > 0) {
+      images[0].remove();  // Remove each image element from the DOM
+      }
+      imageHistory = [];  // Clear the image history
+      redoHistory = [];
+      updateButtons();  // Update the button states
+    }
   }
+  document.getElementById("demo").innerHTML = txt;
 }
 
 function undo() {
