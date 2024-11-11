@@ -331,6 +331,27 @@ font-style: normal;
   #dce-video-container, #canvas-view-container, #camera-view-container{
     transform: scale(0.62);
   }
-  
 
+}
+
+.holder{
+  margin: 0 auto;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-evenly; */
+ /* box-sizing: border-box; */
+ align-items: center;
+}
+
+.holder img {
+  width: 60%;
+  max-width: 60%; /* Constrain to container's width */
+  height: auto; /* Maintain aspect ratio */
+  /* transition: all 0.1s; */
+}
+
+.holder img:hover{
+  /* transform: translateY(-50%) !important; */
+  cursor: pointer;
 }
