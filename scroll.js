@@ -39,7 +39,7 @@ function getScaleFactor() {
     } else if (windowWidth <= 768) {
         return 0.55; // For widths between 481px and 768px
     } else if (windowWidth <= 1279) {
-        return 0.75; // For widths between 769px and 1279px
+        return 0.65; // For widths between 769px and 1279px
     } else {
         return 1; // For larger screens
     }

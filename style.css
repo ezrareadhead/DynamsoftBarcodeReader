@@ -285,6 +285,105 @@ font-style: normal;
   width: 30%;
 }
 
+/* Very Small Screens */
+@media only screen and (max-width: 360px) {
+  .footer p {
+    font-size: 100px;
+    text-align: justify;
+  }
+  .footer {
+    flex-wrap: wrap;
+    height: 230px;
+  }
+  nav img {
+    width: 60px !important;
+  }
+  .buttons {
+    gap: 1.5em;
+    flex-direction: row;
+  }
+  .camera-container {
+    flex-direction: column;
+    gap: 1.8em;
+  }
+  #dce-video-container, #canvas-view-container, #camera-view-container {
+    width: 280px !important;
+    height: 180px !important;
+  }
+  #scan-button {
+    width: 25px;
+    height: 25px;
+  }
+  #undo-button, #redo-button {
+    width: 20px;
+    border-radius: 1px;
+    height: 10px;
+    background-size: 20px;
+  }
+  #clear-button {
+    width: 10px;
+    border-radius: 1.2px;
+    height: 10px;
+    background-size: 20px;
+    padding: 0.6em;
+  }
+  nav p {
+    font-size: 0.7em;
+  }
+}
+
+/* Small Screens */
+@media only screen and (min-width: 360px) and (max-width: 480px) {
+  /* Existing styles */
+}
+
+/* Medium-Small Screens */
+@media only screen and (min-width: 480px) and (max-width: 640px) {
+  .footer p {
+    font-size: 145px;
+    text-align: justify;
+  }
+  .footer {
+    flex-wrap: wrap;
+    height: 300px;
+  }
+  nav img {
+    width: 90px !important;
+  }
+  .buttons {
+    gap: 2em;
+  }
+  .camera-container {
+    flex-direction: column;
+    gap: 2.2em;
+  }
+  #dce-video-container, #canvas-view-container, #camera-view-container {
+    width: 380px !important;
+    height: 250px !important;
+  }
+  #scan-button {
+    width: 40px;
+    height: 40px;
+  }
+  #undo-button, #redo-button {
+    width: 28px;
+    height: 14px;
+    border-radius: 1.5px;
+    background-size: 26px;
+  }
+  #clear-button {
+    width: 14px;
+    border-radius: 1.8px;
+    height: 14px;
+    background-size: 26px;
+    padding: 0.9em;
+  }
+  nav p {
+    font-size: 1em;
+  }
+}
+
+
 
 @media only screen and (max-width: 480px) {
 
@@ -423,8 +522,9 @@ font-style: normal;
   }
 
   #dce-video-container, #canvas-view-container, #camera-view-container{
-    width: 467.5668px !important;
-    height: 310px !important;
+    width: 584.4585px !important;
+height: 387.5px !important;
+
   }
 
   #scan-button{
