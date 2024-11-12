@@ -12,7 +12,6 @@
   width: 100%;
   /* gap: 0.5em; */
   align-items: center;
-  margin: 4em 0;
   max-height: min-content;
   justify-content: space-evenly;
   
@@ -76,7 +75,7 @@
 }
 
 body{
-  max-width: 100vw;
+  max-width: 100vw !important;
   /* max-height: 100vh; */
   height: min-content;
   padding: 0.5em;
@@ -84,13 +83,13 @@ body{
   flex-direction: column;
   gap: 4em;
   /* gap: 0.5em; */
-  background-color: #ffffff;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  min-height: 100vh;
 }
 
 html{
+  max-width: 100vw !important;
   overflow-x: hidden;
-  max-width: 100vw;
 
 }
 
@@ -214,12 +213,16 @@ button:hover{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 215px
+  height: 210px;
+  position: absolute;
+    max-width: 100vw !important;
+    bottom: 0;
+    z-index: -1;
 }
 
 nav{
   top: 0;
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   flex-direction: row;
   z-index: 100;
@@ -243,7 +246,7 @@ font-weight: 400;
 font-style: normal;
     color: #151515;
     text-transform: uppercase;
-  margin: 0;
+  /* padding: 0 9px; */
   /* height: 50%; */
   overflow: hidden;
   font-size: 235px;
@@ -286,7 +289,12 @@ font-style: normal;
   }
   .footer{
     flex-wrap: wrap;
-    height: 375px;
+    height: 265px;
+  }
+
+  nav img{
+    width: 75px !important;
+    width: 75px !important;
   }
 
   .buttons{
@@ -336,7 +344,11 @@ font-style: normal;
   }
   .footer{
     flex-wrap: wrap;
-    height: 375px;
+    height: 315px;
+  }
+  nav img{
+    width: 100px !important;
+    width: 100px !important;
   }
 
   .buttons{
@@ -384,6 +396,15 @@ font-style: normal;
     font-size: 153px;
   }
 
+  .footer{
+    height: 135px;
+  }
+
+  nav img{
+    width: 115px !important;
+    width: 115px !important;
+  }
+
   #dce-video-container, #canvas-view-container, #camera-view-container{
     width: 467.5668px !important;
     height: 310px !important;
@@ -416,6 +437,10 @@ font-style: normal;
 
   nav p{
     font-size: 1.24em;
+  }
+
+  .holder img::after {
+    transform: scale(0.5);
   }
 }
 
@@ -482,3 +507,7 @@ p{
     margin: 0;
 }
 
+.contain{
+  max-width: 100vw !important;
+  overflow: hidden !important;
+}

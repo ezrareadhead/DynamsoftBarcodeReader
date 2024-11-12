@@ -5,21 +5,20 @@ function getRandNum() {
 }
 
 function getRandomXPosition() {
-    // 50vh + random value
-    return (Math.random() * 500 - 250); // 50vh + random value between 0 and 500px
+    return (Math.random() * 500 - 250); // Random value between -250px and 250px
 }
 
 function getRandomRotation() {
-    // Random rotation between -45 and 45 degrees, plus 90
-    return 90 + (Math.random() * 50 - 25);
+    return 90 + (Math.random() * 50 - 25); // Random rotation between 65 and 115 degrees
 }
 
 function getRandomMarginBottom() {
-    // Random margin-bottom value between 10px and 500px
-    return Math.random() * 490 + 10;  // Generates a value between 10px and 500px
+    return Math.random() * 490 + 10;  // Value between 10px and 500px
 }
+
 let isLoading = false;
 
+// Load images when the user scrolls near the bottom of the page
 window.addEventListener("scroll", () => {
     if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight && !isLoading) {
         isLoading = true;
@@ -27,8 +26,30 @@ window.addEventListener("scroll", () => {
     }
 });
 
+// Function to calculate the scale based on window width
+function getScaleFactor() {
+    const windowWidth = window.innerWidth;
+
+    if (windowWidth <= 480) {
+        return 0.35; // For max-width 480px
+    } else if (windowWidth <= 768) {
+        return 0.55; // For widths between 481px and 768px
+    } else if (windowWidth <= 1279) {
+        return 0.75; // For widths between 769px and 1279px
+    } else {
+        return 1; // For larger screens
+    }
+}
+
+function applyScale(images) {
+    const scale = getScaleFactor();
+    images.forEach(img => {
+        const rotation = img.dataset.rotation || 90;
+        img.style.transform = `rotate(${rotation}deg) scale(${scale})`;
+    });
+}
+
 function loadImages() {
-    const container = document.querySelector(".holder");
     const images = [];
     let imagesLoaded = 0;
 
@@ -36,70 +57,50 @@ function loadImages() {
         const avatarImg = document.createElement('img');
         avatarImg.src = `https://picsum.photos/1024/512?random=${getRandNum()}`;
 
-        // Track loaded images
         avatarImg.addEventListener('load', () => {
             imagesLoaded++;
 
-            // Once all 10 images are loaded, append them to the container
             if (imagesLoaded === 10) {
                 images.forEach(img => container.appendChild(img));
-                isLoading = false;  // Reset the flag after loading is complete
+                isLoading = false;
+                applyScale(images); // Apply initial scaling when images load
             }
         });
 
-        // Get random X position and margin-bottom
         const x = getRandomXPosition();
         const marginBottom = getRandomMarginBottom();
-
-        // Determine if the image should have a rotation (50% chance)
         const hasRotation = Math.random() > 0.5;
-        let rotation = hasRotation ? getRandomRotation() : 90;
+        const rotation = hasRotation ? getRandomRotation() : 90;
 
-        // Apply random styles (X position, rotation, margin-bottom)
         avatarImg.style.marginRight = `${x}px`;
-        avatarImg.style.transform = `rotate(${rotation}deg)`;
         avatarImg.style.marginBottom = `${marginBottom}px`;
+        avatarImg.dataset.rotation = rotation; // Store rotation for resizing
+        avatarImg.style.transform = `rotate(${rotation}deg) scale(${getScaleFactor()})`;
 
-        // Store the image in the array until all are loaded
         images.push(avatarImg);
     }
 }
 
 loadImages();
-// Listen for scroll events to load images dynamically when nearing the bottom of the page
 
-window.addEventListener("scroll", () => {
-    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight && !isLoading) {
-        isLoading = true;
-        loadImages();
-        isLoading = false; // Reset the flag after loading is complete
-    }
+// Adjust scale on window resize
+window.addEventListener("resize", () => {
+    const images = Array.from(container.querySelectorAll("img"));
+    applyScale(images);
 });
 
 // Event delegation for showing div on image click
 container.addEventListener('click', (event) => {
-    console.log("hi")
     if (event.target.tagName === 'IMG') {
         showDiv(event.target);
     }
 });
-
-
-// Function to apply scale based on position of an image
-// function applyScale(img) {
-//     const rect = img.getBoundingClientRect();
-//     const distanceFromTop = rect.top;
-//     const scaleFactor = Math.max(0.5, 0.8 + distanceFromTop / window.innerHeight);
-//     img.style.transform = `scale(${scaleFactor})`;
-// }
-
 
 // Function to show the div when an image is clicked
 function showDiv(image) {
     const div = document.createElement('div');
     div.classList.add('info-div');
     
-    // Clear any previous content
     div.innerHTML = ""; 
 
     const hiddenButton = document.createElement('button');
@@ -107,11 +108,9 @@ function showDiv(image) {
     hiddenButton.style.cursor = "revert";
     div.appendChild(hiddenButton);
 
-    // Append the clicked image to the div
-    const clonedImage = image.cloneNode();  // Clone the image to prevent DOM manipulations on the original image
+    const clonedImage = image.cloneNode();
     div.appendChild(clonedImage);
     
-    // Style the div (you can customize the styles as needed)
     div.style.position = 'fixed';
     div.style.width = '100%';
     div.style.height = '100%';
@@ -119,21 +118,21 @@ function showDiv(image) {
     div.style.color = 'white';
     div.style.zIndex = '9999';
     div.style.display = 'flex';
+    div.style.flexDirection = 'column';
+    div.style.gap = '2em';
     div.style.alignItems = 'center';
-    div.style.justifyContent = 'space-evenly';
+    div.style.justifyContent = 'center';
 
-    clonedImage.style.width = "50%";
+    clonedImage.style.width = "60%";
+    clonedImage.style.minWidth = "480px";
     clonedImage.style.position = "relative";
     clonedImage.style.transform = "none";
     clonedImage.style.margin = "0";
     clonedImage.style.boxShadow = "0 20px 40px 0 rgba(0, 0, 0, 0.4)";
     clonedImage.style.border = "solid 10px white";
 
-
-    // Append the div to the body
     document.body.appendChild(div);
 
-    // Optionally, add a close button to hide the div when clicked
     const closeButton = document.createElement('button');
     closeButton.id = 'scan-button'; 
     closeButton.style.backgroundImage = "url('./assets/stop.png')";
@@ -147,6 +146,7 @@ function showDiv(image) {
 
     const likeButton = document.createElement('button');
     likeButton.innerText = "Like";
+    likeButton.id = "like-button";
     likeButton.style.backgroundColor = "transparent";
     likeButton.style.color = "red";
     likeButton.style.border = "solid red 1px";
@@ -162,15 +162,3 @@ function showDiv(image) {
     closeButton.style.left = "5em";
     closeButton.style.top = "5em";
 }
-
-
-// Scale all images based on their position relative to the top of the viewport.
-// function scaleImagesOnScroll() {
-//     const images = document.querySelectorAll('.holder img');
-//     images.forEach((img) => {
-//         applyScale(img);
-//     });
-// }
-
-// loadImages();
-
