@@ -493,6 +493,7 @@
     {
         "id": "\u001d567890123459",
         "code": "DataMatrix",
+        "type": "Audio",
         "generated": true,
         "tested": true,
         "printed": false,

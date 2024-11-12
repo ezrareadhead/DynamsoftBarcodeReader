@@ -1,7 +1,20 @@
 const container = document.querySelector(".holder");
+const fadeText = document.getElementById('fade-text');
+// List of predefined image URLs
+const imageUrls = [
+    'https://www.dropbox.com/scl/fi/xocdc6i1kqlzi7xbmjiyr/IMG_1661.PNG?rlkey=bjgkorfrovgpfdf91zv9thr1r&st=awkvcrd0&dl=0&raw=1',
+    'https://www.dropbox.com/scl/fi/eckuucl4a8jms2t1err9m/Screenshot-2024-11-12-at-23.27.51.png?rlkey=wznbhuzr5s8jodv2k0vnx9f2m&st=uj7v65om&dl=0&raw=1',
+    'https://www.dropbox.com/scl/fi/thg0yk8cxppg29knljxbb/Screenshot-2024-11-12-at-23.29.44.png?rlkey=uw8w9pizozcc3dpqg6ben7sfe&st=xkxvle4n&dl=0&raw=1',
+    'https://www.dropbox.com/scl/fi/w4q7lffa6vreqb76jjs2h/IMG_1659.PNG?rlkey=8s32pf99zuzwnpjsdv23q9fny&st=h8b87hwv&dl=0&raw=1',
+    'https://www.dropbox.com/scl/fi/t7z27v84zk8ckzlk0y81d/IMG_1658.PNG?rlkey=09eeyfp7d8ztumiduld66mquy&st=ov72xm0w&dl=0&raw=1',
+    'https://www.dropbox.com/scl/fi/n68fask5ippzs9rd5lgg4/IMG_0082.PNG?rlkey=4rg5rlpya9jqlnyg3fpq1qlhx&st=j378z7xf&dl=0&raw=1',
+    'https://www.dropbox.com/scl/fi/3ad0aibd2hhcygidiqz2r/IMG_0080.PNG?rlkey=qi5n4e525pm1gn0viz2dn8jyf&st=m2yt46f3&dl=0&raw=1'
+];
 
-function getRandNum() {
-    return Math.floor(Math.random() * 100);
+// Function to get a random image URL from the list
+function getRandomImageUrl() {
+    const randomIndex = Math.floor(Math.random() * imageUrls.length);
+    return imageUrls[randomIndex];
 }
 
 function getRandomXPosition() {
@@ -9,11 +22,11 @@ function getRandomXPosition() {
 }
 
 function getRandomRotation() {
-    return (Math.random() * 50 - 25); // Random rotation between 65 and 115 degrees
+    return (Math.random() * 50 - 25); // Random rotation between -25 and 25 degrees
 }
 
 function getRandomMarginBottom() {
-    return Math.random() * 140 + 10;  // Value between 10px and 500px
+    return Math.random() * 140 + 10;  // Value between 10px and 150px
 }
 
 let isLoading = false;
@@ -24,11 +37,22 @@ const holder = document.querySelector('.holder');
 
 holder.addEventListener('scroll', () => {
     // Check if scrolled to the bottom of the holder
-    if ((holder.scrollTop + holder.clientHeight) +300 >= holder.scrollHeight && !isLoading) {
+    if ((holder.scrollTop + holder.clientHeight) + 300 >= holder.scrollHeight && !isLoading) {
         isLoading = true;
         loadImages();
     }
-});
+        // Get the scroll position of the container
+        const scrollTop = holder.scrollTop;
+        const containerHeight = holder.clientHeight;
+        const scrollHeight = holder.scrollHeight;
+        
+        // Calculate the scroll percentage
+        const scrollPercentage = (scrollTop / (scrollHeight - containerHeight)) * 5;
+        
+        // Adjust the opacity based on the scroll percentage
+        // You can adjust the multiplier (e.g., 1 or 0.5) for faster/slower fading
+        fadeText.style.opacity = 1 - scrollPercentage;  // Decrease opacity as you scroll down
+    });
 
 // Function to calculate the scale based on window width
 function getScaleFactor() {
@@ -59,7 +83,7 @@ function loadImages() {
 
     for (let i = 1; i <= 10; i++) {
         const avatarImg = document.createElement('img');
-        avatarImg.src = `https://picsum.photos/1024/512?random=${getRandNum()}`;
+        avatarImg.src = getRandomImageUrl(); // Use the random image URL
 
         avatarImg.addEventListener('load', () => {
             imagesLoaded++;
@@ -111,11 +135,6 @@ function showDiv(image) {
     
     div.innerHTML = ""; 
 
-    // const hiddenButton = document.createElement('button');
-    // hiddenButton.style.opacity = "0";
-    // hiddenButton.style.cursor = "revert";
-    // div.appendChild(hiddenButton);
-
     const clonedImage = image.cloneNode();
     div.appendChild(clonedImage);
     
@@ -132,12 +151,15 @@ function showDiv(image) {
     div.style.justifyContent = 'center';
 
     clonedImage.style.width = "60%";
-    clonedImage.style.minWidth = "480px";
+    // clonedImage.style.minWidth = "480px";
     clonedImage.style.position = "relative";
     clonedImage.style.transform = "none";
     clonedImage.style.margin = "0";
     clonedImage.style.boxShadow = "0 20px 40px 0 rgba(0, 0, 0, 0.4)";
     clonedImage.style.border = "solid 10px white";
+    clonedImage.style.maxHeight = "90%";
+    clonedImage.style.maxWidth = "80%";
+    clonedImage.style.width = "auto";
 
     document.body.appendChild(div);
 
@@ -151,20 +173,6 @@ function showDiv(image) {
         div.remove();
     });
     div.appendChild(closeButton);
-
-    // const likeButton = document.createElement('button');
-    // likeButton.innerText = "Like";
-    // likeButton.id = "like-button";
-    // likeButton.style.backgroundColor = "transparent";
-    // likeButton.style.color = "red";
-    // likeButton.style.border = "solid red 1px";
-    // likeButton.style.padding = "10px 20px";
-    // likeButton.style.borderRadius = "5px";
-
-    // likeButton.addEventListener('click', () => {
-    //     likeButton.style.backgroundColor = "red";
-    // });
-    // div.appendChild(likeButton);
 
     closeButton.style.position = "absolute";
     closeButton.style.left = "5em";
