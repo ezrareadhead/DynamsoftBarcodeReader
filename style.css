@@ -325,10 +325,6 @@ font-style: normal;
     background-size: 22px;
   }
 
-  #hidden{
-    display: none;
-  }
-
   #clear-button{
     width: 12px;
     border-radius: 1.6px;
@@ -383,9 +379,6 @@ font-style: normal;
     background-size: 30.25px;
   }
 
-  #hidden{
-    display: none;
-  }
 
   #clear-button{
     width: 16.5px;
@@ -463,6 +456,7 @@ font-style: normal;
 
   .camera-container{
     flex-direction: column;
+    gap: 2.5em;
   }
 }
 
