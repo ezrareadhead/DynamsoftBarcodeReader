@@ -9,18 +9,22 @@ function getRandomXPosition() {
 }
 
 function getRandomRotation() {
-    return 90 + (Math.random() * 50 - 25); // Random rotation between 65 and 115 degrees
+    return (Math.random() * 50 - 25); // Random rotation between 65 and 115 degrees
 }
 
 function getRandomMarginBottom() {
-    return Math.random() * 490 + 10;  // Value between 10px and 500px
+    return Math.random() * 140 + 10;  // Value between 10px and 500px
 }
 
 let isLoading = false;
 
-// Load images when the user scrolls near the bottom of the page
-window.addEventListener("scroll", () => {
-    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight && !isLoading) {
+// scroll.js
+
+const holder = document.querySelector('.holder');
+
+holder.addEventListener('scroll', () => {
+    // Check if scrolled to the bottom of the holder
+    if ((holder.scrollTop + holder.clientHeight) +300 >= holder.scrollHeight && !isLoading) {
         isLoading = true;
         loadImages();
     }
@@ -44,7 +48,7 @@ function getScaleFactor() {
 function applyScale(images) {
     const scale = getScaleFactor();
     images.forEach(img => {
-        const rotation = img.dataset.rotation || 90;
+        const rotation = img.dataset.rotation || 0;
         img.style.transform = `rotate(${rotation}deg) scale(${scale})`;
     });
 }
@@ -60,17 +64,21 @@ function loadImages() {
         avatarImg.addEventListener('load', () => {
             imagesLoaded++;
 
+            // Append each image to the container immediately after it loads
+            container.appendChild(avatarImg);
+
+            // Apply scale to each image individually
+            applyScale([avatarImg]);
+
             if (imagesLoaded === 10) {
-                images.forEach(img => container.appendChild(img));
                 isLoading = false;
-                applyScale(images); // Apply initial scaling when images load
             }
         });
 
         const x = getRandomXPosition();
         const marginBottom = getRandomMarginBottom();
         const hasRotation = Math.random() > 0.5;
-        const rotation = hasRotation ? getRandomRotation() : 90;
+        const rotation = hasRotation ? getRandomRotation() : 0;
 
         avatarImg.style.marginRight = `${x}px`;
         avatarImg.style.marginBottom = `${marginBottom}px`;
@@ -103,10 +111,10 @@ function showDiv(image) {
     
     div.innerHTML = ""; 
 
-    const hiddenButton = document.createElement('button');
-    hiddenButton.style.opacity = "0";
-    hiddenButton.style.cursor = "revert";
-    div.appendChild(hiddenButton);
+    // const hiddenButton = document.createElement('button');
+    // hiddenButton.style.opacity = "0";
+    // hiddenButton.style.cursor = "revert";
+    // div.appendChild(hiddenButton);
 
     const clonedImage = image.cloneNode();
     div.appendChild(clonedImage);
@@ -144,19 +152,19 @@ function showDiv(image) {
     });
     div.appendChild(closeButton);
 
-    const likeButton = document.createElement('button');
-    likeButton.innerText = "Like";
-    likeButton.id = "like-button";
-    likeButton.style.backgroundColor = "transparent";
-    likeButton.style.color = "red";
-    likeButton.style.border = "solid red 1px";
-    likeButton.style.padding = "10px 20px";
-    likeButton.style.borderRadius = "5px";
+    // const likeButton = document.createElement('button');
+    // likeButton.innerText = "Like";
+    // likeButton.id = "like-button";
+    // likeButton.style.backgroundColor = "transparent";
+    // likeButton.style.color = "red";
+    // likeButton.style.border = "solid red 1px";
+    // likeButton.style.padding = "10px 20px";
+    // likeButton.style.borderRadius = "5px";
 
-    likeButton.addEventListener('click', () => {
-        likeButton.style.backgroundColor = "red";
-    });
-    div.appendChild(likeButton);
+    // likeButton.addEventListener('click', () => {
+    //     likeButton.style.backgroundColor = "red";
+    // });
+    // div.appendChild(likeButton);
 
     closeButton.style.position = "absolute";
     closeButton.style.left = "5em";

@@ -113,6 +113,8 @@ html{
 button{
   box-shadow: none;
   cursor: pointer;
+  background-color: transparent;
+  border: none;
 }
 
 #scan-button, #undo-button, #clear-button, #redo-button {
@@ -338,6 +340,12 @@ font-style: normal;
     nav p{
       font-size: 0.8em;
     }
+
+    #fullscreen-overlay p{
+      transform: scale(0.55);
+      max-width: 90vw;
+      height: min-content;
+    }
 }
 
 @media only screen and (min-width: 480px) and (max-width: 768px) {
@@ -392,6 +400,11 @@ font-style: normal;
 
   nav p{
     font-size: 1.1em;
+  }
+
+  #fullscreen-overlay p{
+    transform: scale(0.75);
+    max-width: 90vw;
   }
 }
 
@@ -470,6 +483,11 @@ font-style: normal;
   .camera-container{
     flex-direction: row;
   }
+
+  #fullscreen-overlay p{
+    transform: scale(0.75);
+  }
+  
 }
 
 }
@@ -485,17 +503,17 @@ font-style: normal;
  display: flex;
  flex-direction: column;
  align-items: center;
- width: 100vh;
- transform: rotate(-90deg) translate3d(0,-100vh,0);
- transform-origin: right top;
+ width: 100vw;
+ /* transform: rotate(-90deg) translate3d(0,-100vh,0); */
+ /* transform-origin: right top; */
  overflow-y: auto;
  overflow-x: hidden;
  padding: 0;
- height: 100vw;
+ height: 100vh;
  perspective: 1px;
- transform-style: preserve-3d;
- padding-top: 100vw;
+ /* transform-style: preserve-3d; */
  position: absolute;
+ padding-top: 100vw;
 }
 
 .holder img {
@@ -540,4 +558,26 @@ p{
 .contain{
   max-width: 100vw !important;
   overflow: hidden !important;
+}
+
+#fullscreen-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #0036FA;
+  color: white;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  align-items: center;
+  justify-content: center;
+}
+
+#fullscreen-overlay p{
+  max-width: 80vw;
+}
+
+#fullscreen-overlay button:hover{
+  box-shadow: none !important;
 }

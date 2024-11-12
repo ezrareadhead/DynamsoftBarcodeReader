@@ -9,12 +9,17 @@
 <link rel="stylesheet" href="https://use.typekit.net/mbj0awg.css">
 
 <!-- <div class="contain"> -->
-  <nav style=" width: 100%; right: 0; justify-content: right;">
+  <nav style=" max-width: 100vw; right: 0; justify-content: right; overflow: hidden; height: 5.2em;">
     <a href="share.html">
       <p style="margin-right: 1em;">COMMUNITY</p>
-      <img src="./assets/images/Illustration_sans_titre 7.png" alt="" style="position: absolute; width: 150px; transform: translate(30%, -15%) scaleX(-1);">
+      <img src="./assets/images/Illustration_sans_titre 7.png" alt="" style=" width: 150px; transform: translate(20%, -15%) scaleX(-1); ">
   </a>
   </nav>
+  <div id="fullscreen-overlay">
+    <p style="font-size: 100px; text-align: center;">Welcome to CUT+PASTE !</p>
+    <p style="text-align: center;">Using your booklet:<br>1. Scan as many of the provided barcodes in any order<br>2. Repeat until you're happy with your creation<br>3. Screenshot the page<br>4. Share with <span style="font-size: 50px;">#CPcommunity</span><br>5. Needing inspo? Check out our community page to see others' work</p>
+    <button id="close-overlay-btn"><p style="font-size: 30px;">Lets Go !</p></button>
+  </div>
   <div class="camera-container">
     <div class="buttons">
       <button id="undo-button" class="disabled-button" type="button" onclick="undo()"></button>
@@ -94,6 +99,11 @@ async function loadJSON() {
     console.error("Error loading JSON data:", error);
   }
 }
+
+// JavaScript to hide the fullscreen overlay
+document.getElementById('close-overlay-btn').addEventListener('click', function() {
+  document.getElementById('fullscreen-overlay').style.display = 'none';
+});
 
 // Call loadJSON on page load
 window.onload = () => {
