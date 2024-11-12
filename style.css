@@ -324,6 +324,10 @@ font-style: normal;
     background-size: 22px;
   }
 
+  #hidden{
+    display: none;
+  }
+
   #clear-button{
     width: 12px;
     border-radius: 1.6px;
@@ -378,6 +382,10 @@ font-style: normal;
     background-size: 30.25px;
   }
 
+  #hidden{
+    display: none;
+  }
+
   #clear-button{
     width: 16.5px;
     border-radius: 2.2px;
@@ -428,6 +436,10 @@ font-style: normal;
     height: 18.6px;
     background-size: 34.1px;
     padding: 1.24em;
+  }
+
+  #hidden{
+    width: 46.5px;
   }
 
   .buttons{
