@@ -454,6 +454,27 @@ font-style: normal;
   .holder img::after {
     transform: scale(0.5);
   }
+
+@media (orientation: portrait) {
+  .buttons{
+    flex-direction: row;
+  }
+
+  .camera-container{
+    flex-direction: column;
+  }
+}
+
+@media (orientation: landscape) {
+  .buttons{
+    flex-direction: column;
+  }
+
+  .camera-container{
+    flex-direction: row;
+  }
+}
+
 }
 
 .holder{
