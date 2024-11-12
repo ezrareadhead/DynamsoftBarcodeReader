@@ -1,355 +1,293 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- <meta name="theme-color" content="#ffffff"> -->
-<!-- <link rel="stylesheet" href="styles.css"> -->
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
-<script src="./distributables/dynamsoft-barcode-reader-bundle@10.4.2002/dist/dbr.bundle.js"></script>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://use.typekit.net/mbj0awg.css">
-
-<!-- <div class="contain"> -->
-  <nav style=" max-width: 100vw; right: 0; justify-content: right; overflow: hidden; height: 5.2em;">
-    <a href="share.html">
-      <p style="margin-right: 1em;">COMMUNITY</p>
-      <img src="./assets/images/Illustration_sans_titre 7.png" alt="" style=" width: 150px; transform: translate(20%, -15%) scaleX(-1); ">
-  </a>
-  </nav>
-  <div id="fullscreen-overlay">
-    <p style="font-size: 100px; text-align: center;">Welcome to CUT+PASTE !</p>
-    <p style="text-align: center;">Using your booklet:<br>1. Scan as many of the provided barcodes in any order<br>2. Repeat until you're happy with your creation<br>3. Screenshot the page<br>4. Share with <span style="font-size: 50px;">#CPcommunity</span><br>5. Needing inspo? Check out our community page to see others' work</p>
-    <button id="close-overlay-btn"><p style="font-size: 30px;">Lets Go !</p></button>
-  </div>
-  <div class="camera-container">
-    <div class="buttons">
-      <button id="undo-button" class="disabled-button" type="button" onclick="undo()"></button>
-      <button id="redo-button" class="disabled-button" type="button" onclick="redo()"></button>
-      <button id="scan-button" type="button" onclick="showDiv()"></button>
-      <button id="clear-button" class="disabled-button" type="button" onclick="clearCanvas()"></button>
+    <script src="./distributables/dynamsoft-barcode-reader-bundle@10.4.2002/dist/dbr.bundle.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.typekit.net/mbj0awg.css">
+    <nav style=" max-width: 100vw; right: 0; justify-content: right; overflow: hidden; height: 5.2em;">
+        <a href="share.html">
+            <p style="margin-right: 1em;">COMMUNITY</p>
+            <img src="./assets/images/Illustration_sans_titre 7.png" alt="" style=" width: 150px; transform: translate(20%, -15%) scaleX(-1); ">
+        </a>
+    </nav>
+    <!-- Popup screen -->
+    <div id="fullscreen-overlay">
+        <p style="font-size: 100px; text-align: center;">Welcome to CUT+PASTE !</p>
+        <p style="text-align: center;">Using your booklet:<br>1. Scan as many of the provided barcodes in any order<br>2. Repeat until you're happy with your creation<br>3. Screenshot the page<br>4. Share with <span style="font-size: 50px;">#CPcommunity</span><br>5. Needing inspo? Check out our community page to see others' work</p>
+        <button id="close-overlay-btn"><p style="font-size: 30px;">Lets Go !</p></button>
     </div>
-    <div id="camera-view-container" style="display: none;">
-      <img class="tape" style="transform: translateX(200%) translateY(-50%);" src="assets/15.png" alt="">
-      <img class="tape" id="ver" style="transform: translateX(-50%) translateY(30%);" src="assets/28.png" alt="">
-      <img class="tape" id="diag" style="transform: translateX(265%) translateY(135%) rotateZ(270deg);" src="assets/43.png" alt="">
+    <div class="camera-container">
+        <div class="buttons">
+            <button id="undo-button" class="disabled-button" type="button" onclick="undo()"></button>
+            <button id="redo-button" class="disabled-button" type="button" onclick="redo()"></button>
+            <button id="scan-button" type="button" onclick="showDiv()"></button>
+            <button id="clear-button" class="disabled-button" type="button" onclick="clearCanvas()"></button>
+        </div>
+        <!-- camera screen -->
+        <div id="camera-view-container" style="display: none;">
+            <img class="tape" style="transform: translateX(200%) translateY(-50%);" src="assets/15.png" alt="">
+            <img class="tape" id="ver" style="transform: translateX(-50%) translateY(30%);" src="assets/28.png" alt="">
+            <img class="tape" id="diag" style="transform: translateX(265%) translateY(135%) rotateZ(270deg);" src="assets/43.png" alt="">
+        </div>
+        <!-- canvas screen -->
+        <div id="canvas-view-container" style="display: block;">
+            <img class="tape" style="transform: translateX(200%) translateY(-50%);" src="assets/15.png" style="z-index: 100;" alt="">
+            <img class="tape" id="ver" style="transform: translateX(-50%) translateY(30%);" src="assets/28.png" style="z-index: 100;" alt="">
+            <img class="tape" id="diag" style="transform: translateX(265%) translateY(135%) rotateZ(270deg);" style="z-index: 100;" src="assets/43.png" alt="">
+            <!-- assets added on scan -->
+            <img id="1209375644830" src="https://www.dropbox.com/scl/fi/o7p1l9h3stjjei2fjcwdz/pexels-photo-11545441_bg1.png?rlkey=p8l9fboy586msyix76h0yh50y&st=xt3nbtld&dl=0&raw=1" style="display: none; width: 100%; z-index: 3;" alt="">
+            <img id="1231234567895" src="https://www.dropbox.com/scl/fi/g8od0p1pnu8os9k5f75ot/pexels-photo-11545441_bg2.png?rlkey=liq2mth7wxeksi6kt35fjtjy3&st=fnqfj6rq&dl=0&raw=1" style="display: none; width: 100%;  z-index: 2; " alt="">
+            <img id="1234567891026" src="https://www.dropbox.com/scl/fi/0e14d0upt658erpl5oqf3/pexels-photo-11545441_bg3.png?rlkey=7mq6t40y3nr40e9ljewljouy4&st=oc12k1w0&dl=0&raw=1" style="display: none; width: 100%;   z-index: 1; " alt="">
+            <img id="2384756892052" src="https://www.dropbox.com/scl/fi/c2qbuwosspv7if5dhkcx5/pexels-photo-11545441_fg1.png?rlkey=j52s1avb5f0u2voexn8c66m9a&st=x7zu42o7&dl=0&raw=1" style="display: none; width: 100%;   z-index: 3; " alt="">
+            <img id="2847361028753" src="https://www.dropbox.com/scl/fi/eaj64j5p7kzum5laqu92u/pexels-photo-11545441_fg2.png?rlkey=5vouyq0fttmpdb75u6rdsfzwd&st=xe6qj5i9&dl=0&raw=1" style="display: none; width: 100%;   z-index: 4; " alt="">
+            <img id="4981037462519" src="https://www.dropbox.com/scl/fi/dzi2299p0sj2kd6f5yqvk/scene_fg4.png?rlkey=5nogrwzkh9tauk70ucpdaaigu&st=kixhq49u&dl=0&raw=1" style="display: none; width: 100%;   z-index: 0; " alt="">
+            <img id="3028765941209" src="https://www.dropbox.com/scl/fi/qvlu7nnxdbtw49rbs8fvm/pexels-photo-11545441_fg3.png?rlkey=s2st8at6bkyhe9pxreafkmysb&st=2jcp51fq&dl=0&raw=1" style="display: none; width: 100%;   z-index: 10; " alt="">
+            <img id="3210965827347" src="https://www.dropbox.com/scl/fi/6gg6nba7alvw5okmfig9i/pexels-photo-11545441-o1.png?rlkey=jhtjynw01qer6czcw1p55hl3d&st=zq4s5iz8&dl=0&raw=1" style="display: none; width: 100%;   z-index: 3; " alt="">
+            <img id="4730291561835" src="https://www.dropbox.com/scl/fi/cca2ggea6eckdqg207hfd/scene_s1.png?rlkey=afhwal9c35ybgsa8akldzsplt&st=ehg4jiuz&dl=0&raw=1" style="display: none; width: 100%;   z-index: 7; " alt="">
+            <img id="5047218390263" src="https://www.dropbox.com/scl/fi/m9d4o9wxc646zsguanerx/scene_o2.png?rlkey=flcin31d44bimhnuf43dc8pzk&st=esmt5c5e&dl=0&raw=1" style="display: none; width: 100%;   z-index: 7; " alt="">
+            <img id="12345678905" src="https://www.dropbox.com/scl/fi/c92gqszkktp0ywkawfcbx/scene_o3.png?rlkey=abwot1ikv7t57dbshnvehni3b&st=2g40c6qw&dl=0&raw=1" style="display: none; width: 100%;   z-index: 15; " alt="">
+            <img id="4006381333931" src="https://www.dropbox.com/scl/fi/sfeb5v94t8i372ptwjjb9/scene_04.png?rlkey=2jpyi44q7apdnzdy2nm1apqxl&st=iugciotq&dl=0&raw=1" style="display: none; width: 100%;   z-index: 16; " alt="">
+            <img id="23456789012" src="https://www.dropbox.com/scl/fi/slvvt2x0euyra0l7r5uwp/scene_s2.png?rlkey=tcx1utf4abdb7ix7k6ey47cl9&st=gu2oqoz0&dl=0&raw=1" style="display: none; width: 100%;   z-index: 16; " alt="">
+            <img id="4625790816249" src="https://www.dropbox.com/scl/fi/kddj37ne0vrft5l0q3ji8/scene_o5.png?rlkey=gt7bjqurhicjhnx7kjwwobbqj&st=l1rjjbdq&dl=0&raw=1" style="display: none; width: 100%;   z-index: 1; " alt="">
+            <img id="98765432107" src="https://www.dropbox.com/scl/fi/bhv28l2naonje1p7tb7vt/scene_s3.png?rlkey=bjnni03ms3y4j1rvblgdeyt2i&st=1fug2gxf&dl=0&raw=1" style="display: none; width: 100%;   z-index: 3; " alt="">
+            <img id="5124637092158" src="https://www.dropbox.com/scl/fi/6llsk46ttzli310tdekcf/scene_o6.png?rlkey=wa6cae49onjslvd5pbyno4ezj&st=m75ru8bh&dl=0&raw=1" style="display: none; width: 100%;   z-index: 4; " alt="">
+            <img id="4715962038471" src="https://www.dropbox.com/scl/fi/b6nxlezlp3l2z1gm2r4q9/scene_s4.png?rlkey=081i6wcnw235vprwk8fqo05s1&st=arb2oo1h&dl=0&raw=1" style="display: none; width: 100%;   z-index: 4; " alt="">
+        </div>
+        <!-- background assets -->
+        <p id="5901234123457" style="display: none; font-family: pf-fuel-decay, sans-serif; font-weight: 400; position: absolute; top: 2em; right: 7em; transform: scale(1) rotateZ(10deg) ; z-index: -1; text-align: left;  opacity: 50%; ">"Never, ever, be understood completely."<br>- Johnny Rotten</p>
+        <p id="123456789002" style="display: none; font-family: ltr-ncnd-variable,sans-serif; font-variation-settings: 'wght' 474; position: absolute; transform: scale(0.7) rotateZ(-10deg); left: 0; bottom: 20%; z-index: -1; text-align: left;  opacity: 50%; ">"You can’t make a mistake <br> when you improvise." - Patti Smith</p>
+        <div id="6142938571025" style="display: none; position: absolute; width: 100vw; height: 100vh; overflow: hidden; z-index: -1;">
+            <img src="https://www.miguelrubiofotografia.com/wp-content/uploads/2018/01/fotografía-sin-título-1061-470x705.jpg" alt="" style=" width: 150px; transform: scale(-2) rotateZ(-25deg); mix-blend-mode: multiply; position: absolute; top: -2em; right: 0; opacity: 0.8; z-index: -1; ">
+            <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d32f3fb5-0b82-40bb-9813-738b834e5cba/d9t03qf-ef2b0df9-a51c-4e43-bf27-06ed8338b070.jpg/v1/fill/w_900,h_675,q_75,strp/scribble__by_fartyyyyyyyyyyyy_d9t03qf-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9Njc1IiwicGF0aCI6IlwvZlwvZDMyZjNmYjUtMGI4Mi00MGJiLTk4MTMtNzM4YjgzNGU1Y2JhXC9kOXQwM3FmLWVmMmIwZGY5LWE1MWMtNGU0My1iZjI3LTA2ZWQ4MzM4YjA3MC5qcGciLCJ3aWR0aCI6Ijw9OTAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.IoSd6emnii1Rz9oH4-QP_icwRNPXPW0FZOkNwdxTxNI" alt="" style=" width: 150px; transform: rotateZ(-25deg) scale(-1); mix-blend-mode: multiply; position: absolute; right: 30%; bottom: 30%; opacity: 0.7; z-index: 100;">
+            <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d32f3fb5-0b82-40bb-9813-738b834e5cba/d9t03qf-ef2b0df9-a51c-4e43-bf27-06ed8338b070.jpg/v1/fill/w_900,h_675,q_75,strp/scribble__by_fartyyyyyyyyyyyy_d9t03qf-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9Njc1IiwicGF0aCI6IlwvZlwvZDMyZjNmYjUtMGI4Mi00MGJiLTk4MTMtNzM4YjgzNGU1Y2JhXC9kOXQwM3FmLWVmMmIwZGY5LWE1MWMtNGU0My1iZjI3LTA2ZWQ4MzM4YjA3MC5qcGciLCJ3aWR0aCI6Ijw9OTAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.IoSd6emnii1Rz9oH4-QP_icwRNPXPW0FZOkNwdxTxNI" alt="" style=" width: 150px; transform: rotateZ(-5deg) scale(3); mix-blend-mode: multiply; position: absolute; left: 25%; top: 40%; opacity: 0.7; z-index: -1;">
+        </div>
+        <div id="6500531151522" style="display: none; position: absolute; width: 100vw; height: 100vh; overflow: hidden; z-index: -1;">
+            <img src="https://www.dropbox.com/scl/fi/7omkqiwcknltuwb1x4ife/4_1231234567895.gif?rlkey=95lcwit14rjikj5t2lgouvvoy&st=5slw7bmr&dl=0&raw=1" alt="" style=" width: 150px; transform: scale(0.5) rotateZ(-25deg); mix-blend-mode: multiply; position: absolute; top: 20%; left: 0; z-index: -0.1;  padding: 5px; box-shadow: 0px 2px 6px 1px rgba(0, 0, 0, 0.1);">
+            <img src="https://www.dropbox.com/scl/fi/ib9ggcm6hsxo3f1kl7ldx/3_6142938571025.gif?rlkey=n73u3hu16a0gm2r80najn1g3r&st=7br1dqcp&dl=0&raw=1" alt="" style=" width: 150px; transform: rotateZ(25deg) scale(1); mix-blend-mode: multiply; position: absolute; right: 5%; bottom: 30%;  z-index: 100; padding: 5px; box-shadow: 0px 2px 6px 1px rgba(0, 0, 0, 0.1);">
+            <img src="https://www.dropbox.com/scl/fi/8jolm4rjzvp3b0nyz9xzi/1_012345678905.gif?rlkey=d35ursnpeksn9ozsprxt31k4j&st=t93smnxe&dl=0&raw=1" alt="" style=" width: 150px; transform: rotateZ(-5deg) scale(0.25); mix-blend-mode: multiply; position: absolute; right: 10%; top: 30%; z-index: -1; padding: 5px; box-shadow: 0px 4px 12px 2px rgba(0, 0, 0, 0.1);">
+        </div>
+        <audio id="567890123459" controls autoplay muted style="display: none;">
+            <source src="./assets/images/bbc_rainforest_nhu0501110.mp3" type="audio/mp3">
+        </audio>
+        <!-- ghost buttons to center layout -->
+        <div class="buttons">
+            <button id="hidden" class="disabled-button" type="button"></button>
+            <button id="hidden" class="disabled-button" type="button"></button>
+            <button id="hidden" type="button"></button>
+            <button id="hidden" class="disabled-button" type="button"></button>
+        </div>
     </div>
-    <div id="canvas-view-container" style="display: block;">
-      <img class="tape" style="transform: translateX(200%) translateY(-50%);" src="assets/15.png" style="z-index: 100;" alt="">
-      <img class="tape" id="ver" style="transform: translateX(-50%) translateY(30%);" src="assets/28.png" style="z-index: 100;" alt="">
-      <img class="tape" id="diag" style="transform: translateX(265%) translateY(135%) rotateZ(270deg);" style="z-index: 100;" src="assets/43.png" alt="">
-      <img id="1209375644830" src="https://www.dropbox.com/scl/fi/o7p1l9h3stjjei2fjcwdz/pexels-photo-11545441_bg1.png?rlkey=p8l9fboy586msyix76h0yh50y&st=xt3nbtld&dl=0&raw=1" style="display: none; width: 100%; z-index: 3;" alt="">
-      <img id="1231234567895" src="https://www.dropbox.com/scl/fi/g8od0p1pnu8os9k5f75ot/pexels-photo-11545441_bg2.png?rlkey=liq2mth7wxeksi6kt35fjtjy3&st=fnqfj6rq&dl=0&raw=1" style="display: none; width: 100%;  z-index: 2; " alt="">
-      <img id="1234567891026" src="https://www.dropbox.com/scl/fi/0e14d0upt658erpl5oqf3/pexels-photo-11545441_bg3.png?rlkey=7mq6t40y3nr40e9ljewljouy4&st=oc12k1w0&dl=0&raw=1" style="display: none; width: 100%;   z-index: 1; " alt="">
-      <img id="2384756892052" src="https://www.dropbox.com/scl/fi/c2qbuwosspv7if5dhkcx5/pexels-photo-11545441_fg1.png?rlkey=j52s1avb5f0u2voexn8c66m9a&st=x7zu42o7&dl=0&raw=1" style="display: none; width: 100%;   z-index: 3; " alt="">
-      <img id="2847361028753" src="https://www.dropbox.com/scl/fi/eaj64j5p7kzum5laqu92u/pexels-photo-11545441_fg2.png?rlkey=5vouyq0fttmpdb75u6rdsfzwd&st=xe6qj5i9&dl=0&raw=1" style="display: none; width: 100%;   z-index: 4; " alt="">
-      <img id="4981037462519" src="https://www.dropbox.com/scl/fi/dzi2299p0sj2kd6f5yqvk/scene_fg4.png?rlkey=5nogrwzkh9tauk70ucpdaaigu&st=kixhq49u&dl=0&raw=1" style="display: none; width: 100%;   z-index: 0; " alt="">
-      <img id="3028765941209" src="https://www.dropbox.com/scl/fi/qvlu7nnxdbtw49rbs8fvm/pexels-photo-11545441_fg3.png?rlkey=s2st8at6bkyhe9pxreafkmysb&st=2jcp51fq&dl=0&raw=1" style="display: none; width: 100%;   z-index: 10; " alt="">
-      <img id="3210965827347" src="https://www.dropbox.com/scl/fi/6gg6nba7alvw5okmfig9i/pexels-photo-11545441-o1.png?rlkey=jhtjynw01qer6czcw1p55hl3d&st=zq4s5iz8&dl=0&raw=1" style="display: none; width: 100%;   z-index: 3; " alt="">
-      <img id="4730291561835" src="https://www.dropbox.com/scl/fi/cca2ggea6eckdqg207hfd/scene_s1.png?rlkey=afhwal9c35ybgsa8akldzsplt&st=ehg4jiuz&dl=0&raw=1" style="display: none; width: 100%;   z-index: 7; " alt="">
-      <img id="5047218390263" src="https://www.dropbox.com/scl/fi/m9d4o9wxc646zsguanerx/scene_o2.png?rlkey=flcin31d44bimhnuf43dc8pzk&st=esmt5c5e&dl=0&raw=1" style="display: none; width: 100%;   z-index: 7; " alt="">
-      <img id="12345678905" src="https://www.dropbox.com/scl/fi/c92gqszkktp0ywkawfcbx/scene_o3.png?rlkey=abwot1ikv7t57dbshnvehni3b&st=2g40c6qw&dl=0&raw=1" style="display: none; width: 100%;   z-index: 15; " alt="">
-      <img id="4006381333931" src="https://www.dropbox.com/scl/fi/sfeb5v94t8i372ptwjjb9/scene_04.png?rlkey=2jpyi44q7apdnzdy2nm1apqxl&st=iugciotq&dl=0&raw=1" style="display: none; width: 100%;   z-index: 16; " alt="">
-      <img id="23456789012" src="https://www.dropbox.com/scl/fi/slvvt2x0euyra0l7r5uwp/scene_s2.png?rlkey=tcx1utf4abdb7ix7k6ey47cl9&st=gu2oqoz0&dl=0&raw=1" style="display: none; width: 100%;   z-index: 16; " alt="">
-      <img id="4625790816249" src="https://www.dropbox.com/scl/fi/kddj37ne0vrft5l0q3ji8/scene_o5.png?rlkey=gt7bjqurhicjhnx7kjwwobbqj&st=l1rjjbdq&dl=0&raw=1" style="display: none; width: 100%;   z-index: 1; " alt="">
-      <img id="98765432107" src="https://www.dropbox.com/scl/fi/bhv28l2naonje1p7tb7vt/scene_s3.png?rlkey=bjnni03ms3y4j1rvblgdeyt2i&st=1fug2gxf&dl=0&raw=1" style="display: none; width: 100%;   z-index: 3; " alt="">
-      <img id="5124637092158" src="https://www.dropbox.com/scl/fi/6llsk46ttzli310tdekcf/scene_o6.png?rlkey=wa6cae49onjslvd5pbyno4ezj&st=m75ru8bh&dl=0&raw=1" style="display: none; width: 100%;   z-index: 4; " alt="">
-      <img id="4715962038471" src="https://www.dropbox.com/scl/fi/b6nxlezlp3l2z1gm2r4q9/scene_s4.png?rlkey=081i6wcnw235vprwk8fqo05s1&st=arb2oo1h&dl=0&raw=1" style="display: none; width: 100%;   z-index: 4; " alt="">
+    <textarea id="results" style="width: 100%; min-height: 10vh; font-size: 3vmin; overflow: auto; display: none;" disabled></textarea>
+    <div class="footer">
+        <p><span>C</span><span>U</span><span>T</span></p>
+        <p><span>+</span></p>
+        <p><span>P<span>A</span><span>S</span><span>T</span><span>E</span></p>
     </div>
-    <p id="5901234123457" style="display: none; font-family: pf-fuel-decay, sans-serif; font-weight: 400; position: absolute; top: 2em; right: 7em; transform: scale(1) rotateZ(10deg) ; z-index: -1; text-align: left;  opacity: 50%; ">"Never, ever, be understood completely."<br>- Johnny Rotten</p>
-    <p id="123456789002" style="display: none; font-family: ltr-ncnd-variable,sans-serif; font-variation-settings: 'wght' 474; position: absolute; transform: scale(0.7) rotateZ(-10deg); left: 0; bottom: 20%; z-index: -1; text-align: left;  opacity: 50%; ">"You can’t make a mistake <br> when you improvise." - Patti Smith</p>
-    <div  id="6142938571025" style="display: none; position: absolute; width: 100vw; height: 100vh; overflow: hidden; z-index: -1;">
-      <img  src="https://www.miguelrubiofotografia.com/wp-content/uploads/2018/01/fotografía-sin-título-1061-470x705.jpg" alt="" style=" width: 150px; transform: scale(-2) rotateZ(-25deg); mix-blend-mode: multiply; position: absolute; top: -2em; right: 0; opacity: 0.8; z-index: -1; ">
-      <img  src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d32f3fb5-0b82-40bb-9813-738b834e5cba/d9t03qf-ef2b0df9-a51c-4e43-bf27-06ed8338b070.jpg/v1/fill/w_900,h_675,q_75,strp/scribble__by_fartyyyyyyyyyyyy_d9t03qf-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9Njc1IiwicGF0aCI6IlwvZlwvZDMyZjNmYjUtMGI4Mi00MGJiLTk4MTMtNzM4YjgzNGU1Y2JhXC9kOXQwM3FmLWVmMmIwZGY5LWE1MWMtNGU0My1iZjI3LTA2ZWQ4MzM4YjA3MC5qcGciLCJ3aWR0aCI6Ijw9OTAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.IoSd6emnii1Rz9oH4-QP_icwRNPXPW0FZOkNwdxTxNI" alt="" style=" width: 150px; transform: rotateZ(-25deg) scale(-1); mix-blend-mode: multiply; position: absolute; right: 30%; bottom: 30%; opacity: 0.7; z-index: 100;">
-      <img  src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d32f3fb5-0b82-40bb-9813-738b834e5cba/d9t03qf-ef2b0df9-a51c-4e43-bf27-06ed8338b070.jpg/v1/fill/w_900,h_675,q_75,strp/scribble__by_fartyyyyyyyyyyyy_d9t03qf-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9Njc1IiwicGF0aCI6IlwvZlwvZDMyZjNmYjUtMGI4Mi00MGJiLTk4MTMtNzM4YjgzNGU1Y2JhXC9kOXQwM3FmLWVmMmIwZGY5LWE1MWMtNGU0My1iZjI3LTA2ZWQ4MzM4YjA3MC5qcGciLCJ3aWR0aCI6Ijw9OTAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.IoSd6emnii1Rz9oH4-QP_icwRNPXPW0FZOkNwdxTxNI" alt="" style=" width: 150px; transform: rotateZ(-5deg) scale(3); mix-blend-mode: multiply; position: absolute; left: 25%; top: 40%; opacity: 0.7; z-index: -1;">
-    </div>
-    <div  id="6500531151522" style="display: none; position: absolute; width: 100vw; height: 100vh; overflow: hidden; z-index: -1;">
-      <img  src="https://www.dropbox.com/scl/fi/7omkqiwcknltuwb1x4ife/4_1231234567895.gif?rlkey=95lcwit14rjikj5t2lgouvvoy&st=5slw7bmr&dl=0&raw=1" alt="" style=" width: 150px; transform: scale(0.5) rotateZ(-25deg); mix-blend-mode: multiply; position: absolute; top: 20%; left: 0; z-index: -0.1;  padding: 5px; box-shadow: 0px 2px 6px 1px rgba(0, 0, 0, 0.1);">
-      <img  src="https://www.dropbox.com/scl/fi/ib9ggcm6hsxo3f1kl7ldx/3_6142938571025.gif?rlkey=n73u3hu16a0gm2r80najn1g3r&st=7br1dqcp&dl=0&raw=1" alt="" style=" width: 150px; transform: rotateZ(25deg) scale(1); mix-blend-mode: multiply; position: absolute; right: 5%; bottom: 30%;  z-index: 100; padding: 5px; box-shadow: 0px 2px 6px 1px rgba(0, 0, 0, 0.1);">
-      <img  src="https://www.dropbox.com/scl/fi/8jolm4rjzvp3b0nyz9xzi/1_012345678905.gif?rlkey=d35ursnpeksn9ozsprxt31k4j&st=t93smnxe&dl=0&raw=1" alt="" style=" width: 150px; transform: rotateZ(-5deg) scale(0.25); mix-blend-mode: multiply; position: absolute; right: 10%; top: 30%; z-index: -1; padding: 5px; box-shadow: 0px 4px 12px 2px rgba(0, 0, 0, 0.1);">
-    </div>
-      <audio id="567890123459" controls autoplay muted style="display: none;">
-        <source src="./assets/images/bbc_rainforest_nhu0501110.mp3" type="audio/mp3">
-      </audio>
-    <div class="buttons">
-      <button id="hidden" class="disabled-button" type="button"></button>
-      <button id="hidden" class="disabled-button" type="button"></button>
-      <button id="hidden" type="button"></button>
-      <button id="hidden" class="disabled-button" type="button"></button>
-    </div>
-  </div>
-  <textarea id="results" style="width: 100%; min-height: 10vh; font-size: 3vmin; overflow: auto; display: none;" disabled></textarea>
-  
-  <div class="footer">
-    <p><span>C</span><span>U</span><span>T</span></p>
-    <p><span>+</span></p>
-    <p><span>P<span>A</span><span>S</span><span>T</span><span>E</span></p>
-    <!-- <span id="pen">&lt &gt</span></span> -->
-  </div>
 
-<!-- </div> -->
-
-<script>
-let imageHistory = [];
-let redoHistory = [];
-let isScanning = false;
-let cvRouter, cameraEnhancer;
-
-let jsonData = {};  // Define jsonData as a global variable
-
-async function loadJSON() {
-  try {
-    const response = await fetch('./jsonData.json');  // Adjust path as needed
-    jsonData = await response.json();
-    console.log("JSON data loaded:", jsonData);
-
-
-
-    // Loop through the data array and log each object's id
-    // jsonData.forEach(item => {
-    //   console.log(item.id);  // This will log the id of each item
-    // });
-    // Any initialization code that requires jsonData can go here
-  } catch (error) {
-    console.error("Error loading JSON data:", error);
-  }
-}
-
-// JavaScript to hide the fullscreen overlay
-document.getElementById('close-overlay-btn').addEventListener('click', function() {
-  document.getElementById('fullscreen-overlay').style.display = 'none';
-});
-
-// Call loadJSON on page load
-window.onload = () => {
-  loadJSON().then(() => {
-    // Ensure functions depending on jsonData are called after it's loaded
-    updateButtons();
-  });
-};
-
-    // // Loop through the data array and log each object's id
-    // jsonData.forEach(item => {
-    //     if (item1.text === String(item.id).trim()) {
-    //     console.log(item1.formatString, item1.text)
-    //     document.getElementById(item1.text).style.display = "block";
-    //     cameraViewContainer.style.display = "none";
-    //     canvasViewContainer.style.display = "block";
-    //     stopScanning();
-    //     imageHistory.push(item1.text);
-    //     redoHistory = [];
-    //     updateButtons();
-    //     button.style.backgroundImage = "url('./assets/camera.png')";}
-    //   });
-
-
-function clearCanvas() {
-  if (confirm("Clear the canvas? This can't be undone.")) {
-  const canvasViewContainer = document.getElementById('canvas-view-container');
-  const cameraViewContainer = document.getElementById('camera-view-container');
-    jsonData.forEach(item => {
-      let numericId = parseInt(String(item.id).replace(/\D/g, ''), 10);
-          if (item.id) { // Check if the item has an 'id'
-              const element = document.getElementById(numericId);
-              if (element) {
-                  element.style.display = 'none'; // Hide the element
-              }
-          }
-      });
-    imageHistory = [];  // Clear the image history
-    redoHistory = [];
-    updateButtons();  // Update the button states
-    cameraViewContainer.style.backgroundImage = `url(./assets/heather-green-Kpj1c6eoPJA-unsplash.jpg)`
-    canvasViewContainer.style.backgroundImage = `url(./assets/heather-green-Kpj1c6eoPJA-unsplash.jpg)`
-    document.getElementById('567890123459').muted = true;
-  }}
-
-function undo() {
-  const lastImage = imageHistory.pop();  // Remove the last image from the history
-  const canvasViewContainer = document.getElementById('canvas-view-container');
-  const cameraViewContainer = document.getElementById('camera-view-container');
-  if (lastImage) {
-    if(lastImage == "567890123459"){
-    document.getElementById('567890123459').muted = true;
-    }
-    else if (lastImage == "8943021746582" || lastImage == "1073498201745" || lastImage == "1092376458710"){
-          cameraViewContainer.style.backgroundImage = `url(./assets/heather-green-Kpj1c6eoPJA-unsplash.jpg)`
-          canvasViewContainer.style.backgroundImage = `url(./assets/heather-green-Kpj1c6eoPJA-unsplash.jpg)`
-    }
-    else{
-
-      document.getElementById(lastImage).style.display = "none";
-    }
-    redoHistory.push(lastImage);  // Add it to the redo history
-    console.log("redo history", redoHistory);
-  }
-  updateButtons();  // Update the button states
-}
-
-function redo() {
-  const canvasViewContainer = document.getElementById('canvas-view-container');
-  const cameraViewContainer = document.getElementById('camera-view-container');
-  
-  // If there's an image in the redo history, restore the most recent image
-  const lastUndoneImage = redoHistory.pop();  // Get the last undone image
-  if (lastUndoneImage) {
-    if (lastUndoneImage == "567890123459") {
-      document.getElementById('567890123459').muted = false;
-    }
-    else if (lastUndoneImage == "8943021746582" || lastUndoneImage == "1073498201745" || lastUndoneImage == "1092376458710") {
-      jsonData.forEach(item => {
-        // Convert item.id to a string first, then remove any non-numeric characters
-        let numericId = parseInt(String(item.id).replace(/\D/g, ''), 10);
-        
-        console.log("id", numericId);
-
-        if (numericId === lastUndoneImage) {
-          cameraViewContainer.style.backgroundImage = `url(${item.destination})`;
-          canvasViewContainer.style.backgroundImage = `url(${item.destination})`;
+    <script>
+        let imageHistory = [];
+        let redoHistory = [];
+        let isScanning = false;
+        let cvRouter, cameraEnhancer;
+        let jsonData = {};
+        // load json file
+        async function loadJSON() {
+            try {
+                const response = await fetch('./jsonData.json');
+                jsonData = await response.json();
+                console.log("JSON data loaded:", jsonData);
+            } catch (error) {
+                console.error("Error loading JSON data:", error);
+            }
         }
-      });
-    }
-    else {
-      document.getElementById(lastUndoneImage).style.display = "block";
-    }
-    imageHistory.push(lastUndoneImage);  // Add it back to the image history
-  }
-  
-  updateButtons();  // Update the button states
-}
-
-
-function updateButtons() {
-  const undoButton = document.getElementById('undo-button');
-  const redoButton = document.getElementById('redo-button');
-  const clearButton = document.getElementById('clear-button');
-  const images = document.getElementsByClassName('product-image');
-  
-  // Disable the buttons if there are no actions to undo/redo, and apply the grayscale style
-  undoButton.disabled = imageHistory.length === 0;
-  redoButton.disabled = redoHistory.length === 0;
-
-  // Add the 'disabled-button' class if the button is disabled, and remove it if enabled
-  if (undoButton.disabled) {
-    undoButton.classList.add('disabled-button');
-  } else {
-    undoButton.classList.remove('disabled-button');
-  }
-
-  if (redoButton.disabled) {
-    redoButton.classList.add('disabled-button');
-  } else {
-    redoButton.classList.remove('disabled-button');
-  }
-
-  if(images.length==0  && imageHistory.length == 0 && redoHistory == 0){
-    clearButton.classList.add('disabled-button');
-  }
-  else{
-    clearButton.classList.remove('disabled-button');
-  }
-}
-
-function showDiv() {
-  const cameraViewContainer = document.getElementById('camera-view-container');
-  const canvasViewContainer = document.getElementById('canvas-view-container');
-  const button = document.getElementById('scan-button');
-
-  if (cameraViewContainer.style.display === "none") {
-    cameraViewContainer.style.display = "block";
-    canvasViewContainer.style.display = "none";
-    button.style.backgroundImage = "url('./assets/stop.png')";
-    startScanning();
-  } else {
-    cameraViewContainer.style.display = "none";
-    canvasViewContainer.style.display = "block";
-    button.style.backgroundImage = "url('./assets/camera.png')";
-    stopScanning();
-  }
-}
-
-Dynamsoft.License.LicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAzMjMyNzkzLVRYbFhaV0pRY205cSIsIm1haW5TZXJ2ZXJVUkwiOiJodHRwczovL21kbHMuZHluYW1zb2Z0b25saW5lLmNvbSIsIm9yZ2FuaXphdGlvbklEIjoiMTAzMjMyNzkzIiwic3RhbmRieVNlcnZlclVSTCI6Imh0dHBzOi8vc2Rscy5keW5hbXNvZnRvbmxpbmUuY29tIiwiY2hlY2tDb2RlIjotMTAyMzIxMjUzMn0=");
-Dynamsoft.Core.CoreModule.loadWasm(["dbr"]);
-(async () => {
-  cvRouter = await Dynamsoft.CVR.CaptureVisionRouter.createInstance();
-  let cameraView = await Dynamsoft.DCE.CameraView.createInstance();
-  cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance(cameraView);
-  document.querySelector("#camera-view-container").append(cameraView.getUIElement());
-  cvRouter.setInput(cameraEnhancer);
-
-  let filter = new Dynamsoft.Utility.MultiFrameResultCrossFilter();
-  filter.enableResultCrossVerification('barcode', true);
-  filter.enableResultDeduplication('barcode', true);
-  await cvRouter.addResultFilter(filter);
-
-  cvRouter.addResultReceiver({ onDecodedBarcodesReceived: handleBarcodeResults });
-  await cameraEnhancer.close();
-})();
-
-function handleBarcodeResults(result) {
-  const resultsContainer = document.querySelector("#results");
-  const cameraViewContainer = document.getElementById('camera-view-container');
-  const button = document.getElementById('scan-button');
-  const canvasViewContainer = document.getElementById('canvas-view-container');
-
-  if (result.barcodeResultItems.length) {
-    resultsContainer.textContent = '';
-    for (let item1 of result.barcodeResultItems) {
-      resultsContainer.textContent += `${item1.formatString}: ${item1.text}\n\n`;
-
-    
-    // Loop through the data array and log each object's id
-      jsonData.forEach(item => {
-        
-    // Convert item.id to a string first, then remove any non-numeric characters
-    let numericId = parseInt(String(item.id).replace(/\D/g, ''), 10);
-    let numericId1 = parseInt(String(item1.text).replace(/\D/g, ''), 10);
-        
-        console.log("text", numericId1);
-        console.log("id", numericId);
-
-
-        if (numericId === numericId1) {
-          if(item.type == "Paper"){
-            // console.log("yay");
-            cameraViewContainer.style.backgroundImage = `url(${item.destination})`
-            canvasViewContainer.style.backgroundImage = `url(${item.destination})`
-          }else if(item.type == "Audio"){
-              // Unmute the audio
-              document.getElementById('567890123459').muted = false;
-              // console.log("scanned");
-          }
-          else{
-            console.log(item1.formatString,  numericId)
-            document.getElementById(numericId).style.display = "block";
-          }
-          cameraViewContainer.style.display = "none";
-          canvasViewContainer.style.display = "block";
-          stopScanning();
-          imageHistory.push(numericId1);
-          redoHistory = [];
-          updateButtons();
-          button.style.backgroundImage = "url('./assets/camera.png')";}
-      });
-      }
-    }
-  }
-
-
-async function startScanning() {
-  if (!isScanning) {
-    isScanning = true;
-    await cameraEnhancer.open();
-    await cvRouter.startCapturing("ReadSingleBarcode");
-  }
-}
-
-async function stopScanning() {
-  if (isScanning) {
-    isScanning = false;
-    await cvRouter.stopCapturing();
-    await cameraEnhancer.close();
-  }
-}
-</script>
+        // close popup
+        document.getElementById('close-overlay-btn').addEventListener('click', function () {
+            document.getElementById('fullscreen-overlay').style.display = 'none';
+        });
+        // update button state
+        window.onload = () => {
+            loadJSON().then(() => {
+                updateButtons();
+            });
+        };
+        // clear entire canvas
+        function clearCanvas() {
+            if (confirm("Clear the canvas? This can't be undone.")) {
+                const canvasViewContainer = document.getElementById('canvas-view-container');
+                const cameraViewContainer = document.getElementById('camera-view-container');
+                jsonData.forEach(item => {
+                    let numericId = parseInt(String(item.id).replace(/\D/g, ''), 10);
+                    if (item.id) {
+                        const element = document.getElementById(numericId);
+                        if (element) {
+                            element.style.display = 'none';
+                        }
+                    }
+                });
+                imageHistory = [];
+                redoHistory = [];
+                updateButtons();
+                cameraViewContainer.style.backgroundImage = `url(./assets/heather-green-Kpj1c6eoPJA-unsplash.jpg)`
+                canvasViewContainer.style.backgroundImage = `url(./assets/heather-green-Kpj1c6eoPJA-unsplash.jpg)`
+                document.getElementById('567890123459').muted = true;
+            }
+        }
+        // undo last image
+        function undo() {
+            const lastImage = imageHistory.pop();
+            const canvasViewContainer = document.getElementById('canvas-view-container');
+            const cameraViewContainer = document.getElementById('camera-view-container');
+            if (lastImage) {
+                if (lastImage == "567890123459") {
+                    document.getElementById('567890123459').muted = true;
+                }
+                else if (lastImage == "8943021746582" || lastImage == "1073498201745" || lastImage == "1092376458710") {
+                    cameraViewContainer.style.backgroundImage = `url(./assets/heather-green-Kpj1c6eoPJA-unsplash.jpg)`
+                    canvasViewContainer.style.backgroundImage = `url(./assets/heather-green-Kpj1c6eoPJA-unsplash.jpg)`
+                }
+                else {
+                    document.getElementById(lastImage).style.display = "none";
+                }
+                redoHistory.push(lastImage);
+            }
+            updateButtons();
+        }
+        // redo last undo
+        function redo() {
+            const canvasViewContainer = document.getElementById('canvas-view-container');
+            const cameraViewContainer = document.getElementById('camera-view-container');
+            const lastUndoneImage = redoHistory.pop();
+            if (lastUndoneImage) {
+                if (lastUndoneImage == "567890123459") {
+                    document.getElementById('567890123459').muted = false;
+                }
+                else if (lastUndoneImage == "8943021746582" || lastUndoneImage == "1073498201745" || lastUndoneImage == "1092376458710") {
+                    jsonData.forEach(item => {
+                        let numericId = parseInt(String(item.id).replace(/\D/g, ''), 10);
+                        if (numericId === lastUndoneImage) {
+                            cameraViewContainer.style.backgroundImage = `url(${item.destination})`;
+                            canvasViewContainer.style.backgroundImage = `url(${item.destination})`;
+                        }
+                    });
+                }
+                else {
+                    document.getElementById(lastUndoneImage).style.display = "block";
+                }
+                imageHistory.push(lastUndoneImage);
+            }
+            updateButtons();
+        }
+        // update button state (enable/disable)
+        function updateButtons() {
+            const undoButton = document.getElementById('undo-button');
+            const redoButton = document.getElementById('redo-button');
+            const clearButton = document.getElementById('clear-button');
+            const images = document.getElementsByClassName('product-image');
+            undoButton.disabled = imageHistory.length === 0;
+            redoButton.disabled = redoHistory.length === 0;
+            if (undoButton.disabled) {
+                undoButton.classList.add('disabled-button');
+            } else {
+                undoButton.classList.remove('disabled-button');
+            }
+            if (redoButton.disabled) {
+                redoButton.classList.add('disabled-button');
+            } else {
+                redoButton.classList.remove('disabled-button');
+            }
+            if (images.length == 0 && imageHistory.length == 0 && redoHistory == 0) {
+                clearButton.classList.add('disabled-button');
+            }
+            else {
+                clearButton.classList.remove('disabled-button');
+            }
+        }
+        // show/hide camera
+        function showDiv() {
+            const cameraViewContainer = document.getElementById('camera-view-container');
+            const canvasViewContainer = document.getElementById('canvas-view-container');
+            const button = document.getElementById('scan-button');
+            if (cameraViewContainer.style.display === "none") {
+                cameraViewContainer.style.display = "block";
+                canvasViewContainer.style.display = "none";
+                button.style.backgroundImage = "url('./assets/stop.png')";
+                startScanning();
+            } else {
+                cameraViewContainer.style.display = "none";
+                canvasViewContainer.style.display = "block";
+                button.style.backgroundImage = "url('./assets/camera.png')";
+                stopScanning();
+            }
+        }
+        // Dynamsoft barcode reader
+        Dynamsoft.License.LicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAzMjMyNzkzLVRYbFhaV0pRY205cSIsIm1haW5TZXJ2ZXJVUkwiOiJodHRwczovL21kbHMuZHluYW1zb2Z0b25saW5lLmNvbSIsIm9yZ2FuaXphdGlvbklEIjoiMTAzMjMyNzkzIiwic3RhbmRieVNlcnZlclVSTCI6Imh0dHBzOi8vc2Rscy5keW5hbXNvZnRvbmxpbmUuY29tIiwiY2hlY2tDb2RlIjotMTAyMzIxMjUzMn0=");
+        Dynamsoft.Core.CoreModule.loadWasm(["dbr"]);
+        (async () => {
+            cvRouter = await Dynamsoft.CVR.CaptureVisionRouter.createInstance();
+            let cameraView = await Dynamsoft.DCE.CameraView.createInstance();
+            cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance(cameraView);
+            document.querySelector("#camera-view-container").append(cameraView.getUIElement());
+            cvRouter.setInput(cameraEnhancer);
+            let filter = new Dynamsoft.Utility.MultiFrameResultCrossFilter();
+            filter.enableResultCrossVerification('barcode', true);
+            filter.enableResultDeduplication('barcode', true);
+            await cvRouter.addResultFilter(filter);
+            cvRouter.addResultReceiver({ onDecodedBarcodesReceived: handleBarcodeResults });
+            await cameraEnhancer.close();
+        })();
+        // Get scan result and show matching asset
+        function handleBarcodeResults(result) {
+            const resultsContainer = document.querySelector("#results");
+            const cameraViewContainer = document.getElementById('camera-view-container');
+            const button = document.getElementById('scan-button');
+            const canvasViewContainer = document.getElementById('canvas-view-container');
+            if (result.barcodeResultItems.length) {
+                resultsContainer.textContent = '';
+                for (let item1 of result.barcodeResultItems) {
+                    resultsContainer.textContent += `${item1.formatString}: ${item1.text}\n\n`;
+                    jsonData.forEach(item => {
+                        let numericId = parseInt(String(item.id).replace(/\D/g, ''), 10);
+                        let numericId1 = parseInt(String(item1.text).replace(/\D/g, ''), 10);
+                        if (numericId === numericId1) {
+                            if (item.type == "Paper") {
+                                cameraViewContainer.style.backgroundImage = `url(${item.destination})`
+                                canvasViewContainer.style.backgroundImage = `url(${item.destination})`
+                            } else if (item.type == "Audio") {
+                                document.getElementById('567890123459').muted = false;
+                            }
+                            else {
+                                document.getElementById(numericId).style.display = "block";
+                            }
+                            cameraViewContainer.style.display = "none";
+                            canvasViewContainer.style.display = "block";
+                            stopScanning();
+                            imageHistory.push(numericId1);
+                            redoHistory = [];
+                            updateButtons();
+                            button.style.backgroundImage = "url('./assets/camera.png')";
+                        }
+                    });
+                }
+            }
+        }
+        // start scanning
+        async function startScanning() {
+            if (!isScanning) {
+                isScanning = true;
+                await cameraEnhancer.open();
+                await cvRouter.startCapturing("ReadSingleBarcode");
+            }
+        }
+        // stop scanning
+        async function stopScanning() {
+            if (isScanning) {
+                isScanning = false;
+                await cvRouter.stopCapturing();
+                await cameraEnhancer.close();
+            }
+        }</script>
 </body>
 </html>
